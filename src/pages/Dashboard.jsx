@@ -35,16 +35,17 @@ const Dashboard = () => {
 
     return (
         <div className="container mx-auto p-6">
-            <div className="flex justify-between items-center mb-8">
-                <h2 className="text-3xl font-bold text-gray-800">Available Resources</h2>
+            {/* NEW: Responsive Header */}
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-800">Available Resources</h2>
 
                 {/* Simple Filter */}
-                <div className="space-x-2">
+                <div className="flex flex-wrap justify-center gap-2">
                     {['all', 'room', 'lab', 'equipment'].map((type) => (
                         <button
                             key={type}
                             onClick={() => setFilter(type)}
-                            className={`px-4 py-2 rounded capitalize ${filter === type ? 'bg-blue-900 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                            className={`px-3 py-1 md:px-4 md:py-2 text-sm md:text-base rounded capitalize ${filter === type ? 'bg-blue-900 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                                 }`}
                         >
                             {type}
@@ -79,7 +80,7 @@ const Dashboard = () => {
                                 <div className="flex justify-between items-start">
                                     <h3 className="text-xl font-bold text-blue-900 mb-2">{resource.name}</h3>
                                     <span className={`text-xs px-2 py-1 rounded capitalize ${resource.type === 'room' ? 'bg-green-100 text-green-800' :
-                                            resource.type === 'equipment' ? 'bg-orange-100 text-orange-800' : 'bg-purple-100 text-purple-800'
+                                        resource.type === 'equipment' ? 'bg-orange-100 text-orange-800' : 'bg-purple-100 text-purple-800'
                                         }`}>
                                         {resource.type}
                                     </span>

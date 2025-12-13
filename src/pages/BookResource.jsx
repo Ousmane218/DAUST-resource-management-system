@@ -124,7 +124,7 @@ const BookResource = () => {
     if (!resource) return <div className="p-10 text-center">Loading details...</div>;
 
     return (
-        <div className="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg mt-10">
+        <div className="max-w-2xl mx-auto p-4 md:p-8 bg-white shadow-lg rounded-lg mt-10">
             <h2 className="text-2xl font-bold text-blue-900 mb-2">Book: {resource.name}</h2>
             <p className="text-gray-600 mb-6">{resource.description}</p>
 

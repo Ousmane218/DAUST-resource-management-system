@@ -40,31 +40,41 @@ function App() {
       <Router>
         <div className="min-h-screen flex flex-col font-sans">
           {/* Navbar */}
-          <nav className="bg-blue-900 text-white p-4 flex justify-between items-center shadow-md">
-            <div className="font-bold text-xl tracking-wide">DAUST RMS</div>
-            <div className="space-x-4">
-              <Link to="/" className="hover:text-blue-200 transition">Home</Link>
+          {/* Responsive Navbar */}
+          <nav className="bg-blue-900 text-white shadow-md">
+            <div className="container mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center">
 
-              {session && (
-                <>
-                  <Link to="/dashboard" className="hover:text-blue-200 transition">Dashboard</Link>
-                  <Link to="/my-bookings" className="hover:text-blue-200 transition">My Bookings</Link>
-                  <Link to="/admin" className="text-red-300 hover:text-white font-semibold transition">Admin Panel</Link>
-                </>
-              )}
+              {/* Logo Area */}
+              <div className="mb-4 md:mb-0 text-center md:text-left">
+                <div className="font-bold text-xl tracking-wide">DAUST RMS</div>
+              </div>
 
-              {!session ? (
-                <Link to="/login" className="bg-blue-700 px-4 py-2 rounded hover:bg-blue-600 transition">
-                  Login
-                </Link>
-              ) : (
-                <button
-                  onClick={handleLogout}
-                  className="bg-red-600 px-4 py-2 rounded hover:bg-red-500 transition"
-                >
-                  Logout
-                </button>
-              )}
+              {/* Links Area - Stacks on mobile, row on desktop */}
+              <div className="flex flex-wrap justify-center gap-4 text-sm md:text-base">
+                <Link to="/" className="hover:text-blue-200 transition">Home</Link>
+
+                {session && (
+                  <>
+                    <Link to="/dashboard" className="hover:text-blue-200 transition">Dashboard</Link>
+                    <Link to="/my-bookings" className="hover:text-blue-200 transition">My Bookings</Link>
+                    {/* Admin Link - Only shows if you are admin (or we can leave it visible for dev) */}
+                    <Link to="/admin" className="text-red-300 hover:text-white transition">Admin Panel</Link>
+                  </>
+                )}
+
+                {!session ? (
+                  <Link to="/login" className="bg-blue-700 px-4 py-2 rounded hover:bg-blue-600 transition">
+                    Login
+                  </Link>
+                ) : (
+                  <button
+                    onClick={handleLogout}
+                    className="bg-red-600 px-4 py-2 rounded hover:bg-red-500 transition"
+                  >
+                    Logout
+                  </button>
+                )}
+              </div>
             </div>
           </nav>
 

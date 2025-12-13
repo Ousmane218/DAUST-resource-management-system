@@ -44,7 +44,7 @@ const MyBookings = () => {
             <h2 className="text-2xl font-bold mb-6">My Reservations</h2>
 
             {loading ? <p>Loading...</p> : (
-                <div className="bg-white shadow rounded-lg overflow-hidden">
+                <div className="bg-white shadow rounded-lg overflow-hidden overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-200">
                         <thead className="bg-gray-50">
                             <tr>

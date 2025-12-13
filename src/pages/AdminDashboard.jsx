@@ -83,7 +83,7 @@ const AdminDashboard = () => {
                 </Link>
             </div>
 
-            <div className="bg-white shadow rounded-lg overflow-hidden">
+            <div className="bg-white shadow rounded-lg overflow-hidden overflow-x-auto">
                 <div className="px-6 py-4 border-b">
                     <h2 className="text-xl font-semibold">Pending Approvals ({bookings.length})</h2>
                 </div>
