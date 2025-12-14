@@ -1,7 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { supabase } from '../lib/supabaseClient';
 
 const Home = () => {
+    const [featuredResources, setFeaturedResources] = useState([]);
+
+    useEffect(() => {
+        const fetchFeatured = async () => {
+            const { data, error } = await supabase
+                .from('resources')
+                .select('*')
+                .eq('is_active', true)
+                .order('created_at', { ascending: false })
+                .limit(3);
+
+            if (!error && data) {
+                setFeaturedResources(data);
+            }
+        };
+        fetchFeatured();
+    }, []);
+
     return (
         <div className="min-h-screen bg-white">
 
@@ -46,7 +65,7 @@ const Home = () => {
                 <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
                     <img
                         className="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full"
-                        src="https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80"
+                        src="/daust_campus.jpg"
                         alt="University Campus"
                     />
                     {/* Subtle overlay to blend image */}
@@ -54,55 +73,38 @@ const Home = () => {
                 </div>
             </div>
 
-            {/* 2. VISUAL CATEGORIES - "What do you need?" */}
+            {/* 2. VISUAL CATEGORIES - Dynamic from DB */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-                <h2 className="text-2xl font-bold text-gray-900 mb-8">What are you looking for?</h2>
+                <h2 className="text-2xl font-bold text-gray-900 mb-8">Recently Added Resources</h2>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-                    {/* Card 1: Classrooms */}
-                    <div className="group relative rounded-xl overflow-hidden h-64 shadow-lg cursor-pointer">
-                        <img
-                            src="https://images.unsplash.com/photo-1517164850305-99a3e65bb47e?auto=format&fit=crop&q=80&w=500"
-                            alt="Classrooms"
-                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-                        <div className="absolute bottom-0 left-0 p-6">
-                            <h3 className="text-white text-xl font-bold">Classrooms</h3>
-                            <p className="text-gray-300 text-sm">Quiet spaces for study and lectures.</p>
-                        </div>
+                {featuredResources.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {featuredResources.map((resource) => (
+                            <Link to={`/book/${resource.id}`} key={resource.id} className="group relative rounded-xl overflow-hidden h-64 shadow-lg cursor-pointer block">
+                                {resource.image_url ? (
+                                    <img
+                                        src={resource.image_url}
+                                        alt={resource.name}
+                                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                    />
+                                ) : (
+                                    <div className="absolute inset-0 w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
+                                        No Image
+                                    </div>
+                                )}
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                                <div className="absolute bottom-0 left-0 p-6">
+                                    <h3 className="text-white text-xl font-bold">{resource.name}</h3>
+                                    <p className="text-gray-300 text-sm line-clamp-1">{resource.description}</p>
+                                </div>
+                            </Link>
+                        ))}
                     </div>
-
-                    {/* Card 2: Labs */}
-                    <div className="group relative rounded-xl overflow-hidden h-64 shadow-lg cursor-pointer">
-                        <img
-                            src="https://images.unsplash.com/photo-1581092921461-eab62e97a783?auto=format&fit=crop&q=80&w=500"
-                            alt="Labs"
-                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-                        <div className="absolute bottom-0 left-0 p-6">
-                            <h3 className="text-white text-xl font-bold">Laboratories</h3>
-                            <p className="text-gray-300 text-sm">Engineering & Robotics workspaces.</p>
-                        </div>
+                ) : (
+                    <div className="text-center text-gray-500 py-10">
+                        <p>No resources found. <Link to="/dashboard" className="text-blue-600 hover:underline">Check the dashboard</Link>.</p>
                     </div>
-
-                    {/* Card 3: Equipment */}
-                    <div className="group relative rounded-xl overflow-hidden h-64 shadow-lg cursor-pointer">
-                        <img
-                            src="https://images.unsplash.com/photo-1615840287214-7ff58936c4cf?auto=format&fit=crop&q=80&w=500"
-                            alt="Equipment"
-                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-                        <div className="absolute bottom-0 left-0 p-6">
-                            <h3 className="text-white text-xl font-bold">Equipment</h3>
-                            <p className="text-gray-300 text-sm">3D Printers, Cameras, and Tools.</p>
-                        </div>
-                    </div>
-
-                </div>
+                )}
             </div>
 
         </div>
