@@ -14,7 +14,7 @@ const AdminDashboard = () => {
 
     const checkAdminAndFetch = async () => {
         try {
-            // 1. Check if user is actually an admin
+            
             const { data: { user } } = await supabase.auth.getUser();
             const { data: profile } = await supabase
                 .from('profiles')
@@ -28,7 +28,7 @@ const AdminDashboard = () => {
                 return;
             }
 
-            // 2. Fetch ALL pending bookings
+            // 2. Fetch 
             const { data, error } = await supabase
                 .from('bookings')
                 .select(`
@@ -40,7 +40,7 @@ const AdminDashboard = () => {
           resources ( name ),
           profiles ( full_name, email )
         `)
-                .eq('status', 'pending') // Only show pending ones
+                .eq('status', 'pending') 
                 .order('start_time', { ascending: true });
 
             if (error) throw error;
@@ -54,7 +54,6 @@ const AdminDashboard = () => {
     };
 
     const handleDecision = async (bookingId, decision) => {
-        // decision should be 'approved' or 'rejected'
         try {
             const { error } = await supabase
                 .from('bookings')
@@ -63,7 +62,7 @@ const AdminDashboard = () => {
 
             if (error) throw error;
 
-            // Remove the processed booking from the list
+            // Remove from the list
             setBookings(bookings.filter(b => b.id !== bookingId));
             toast.success(`Booking ${decision} successfully.`);
 

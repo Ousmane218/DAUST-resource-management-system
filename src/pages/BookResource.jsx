@@ -34,30 +34,30 @@ const BookResource = () => {
     }, [id]);
 
     useEffect(() => {
+        const fetchBusySlots = async () => {
+            // Get start and end of the selected day
+            const dayStart = new Date(`${date}T00:00:00`).toISOString();
+            const dayEnd = new Date(`${date}T23:59:59`).toISOString();
+
+            const { data, error } = await supabase
+                .from('bookings')
+                .select('start_time, end_time')
+                .eq('resource_id', id)
+                .eq('status', 'approved') // Only count approved bookings
+                .gte('start_time', dayStart)
+                .lte('end_time', dayEnd);
+
+            if (error) {
+                console.error('Error fetching slots:', error);
+            } else {
+                setBusySlots(data);
+            }
+        };
+
         if (date && id) {
             fetchBusySlots();
         }
     }, [date, id]);
-
-    const fetchBusySlots = async () => {
-        // Get start and end of the selected day
-        const dayStart = new Date(`${date}T00:00:00`).toISOString();
-        const dayEnd = new Date(`${date}T23:59:59`).toISOString();
-
-        const { data, error } = await supabase
-            .from('bookings')
-            .select('start_time, end_time')
-            .eq('resource_id', id)
-            .eq('status', 'approved') // Only count approved bookings
-            .gte('start_time', dayStart)
-            .lte('end_time', dayEnd);
-
-        if (error) {
-            console.error('Error fetching slots:', error);
-        } else {
-            setBusySlots(data);
-        }
-    };
 
     // 2. Handle Booking Submission
     const handleBooking = async (e) => {
@@ -72,7 +72,8 @@ const BookResource = () => {
             const startTimestamp = new Date(`${date}T${startTime}`).toISOString();
             const endTimestamp = new Date(`${date}T${endTime}`).toISOString();
 
-            if (new Date(endTimestamp) <= new Date(startTimestamp)) {
+            // Refactor: Using my helper function for validation
+            if (!checkDatesAreValid(startTimestamp, endTimestamp)) {
                 throw new Error("End time must be after start time.");
             }
 
@@ -222,3 +223,16 @@ const BookResource = () => {
 };
 
 export default BookResource;
+
+// Helper function to validate dates
+// I moved this outside to keep the component clean and reusable
+function checkDatesAreValid(startStr, endStr) {
+    const startDate = new Date(startStr);
+    const endDate = new Date(endStr);
+
+    // Logic: End time cannot be equal to or before start time
+    if (endDate <= startDate) {
+        return false;
+    }
+    return true;
+}

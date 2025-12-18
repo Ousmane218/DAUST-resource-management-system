@@ -15,13 +15,13 @@ const Dashboard = () => {
 
     const fetchData = async () => {
         try {
+            console.log("Fetching dashboard resources..."); // DEBUG
+
             setLoading(true);
 
-            // 1. Get Current User
             const { data: { user } } = await supabase.auth.getUser();
 
             if (user) {
-                // 2. Check if they are an Admin
                 const { data: profile } = await supabase
                     .from('profiles')
                     .select('role')
@@ -29,18 +29,23 @@ const Dashboard = () => {
                     .single();
 
                 if (profile && profile.role === 'admin') {
+                    console.log("User is Admin"); // DEBUG: Verify role
                     setIsAdmin(true);
                 }
             }
 
-            // 3. Fetch Resources
             const { data, error } = await supabase
                 .from('resources')
                 .select('*')
                 .eq('is_active', true)
-                .order('created_at', { ascending: false }); // Show newest first
+                .order('created_at', { ascending: false });
 
-            if (error) throw error;
+            if (error) {
+                console.error("Supabase Error:", error); // DEBUG: Catch API errors
+                throw error;
+            }
+
+            console.log("Resources loaded:", data); // DEBUG: Check data structure
             setResources(data);
 
         } catch (error) {
@@ -111,10 +116,10 @@ const Dashboard = () => {
                     {filteredResources.map((resource) => (
                         <div key={resource.id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col relative">
 
-                            {/* --- DELETE & EDIT BUTTONS (Only visible to Admins) --- */}
+                            { }
                             {isAdmin && (
                                 <div className="absolute top-2 right-2 z-10 flex gap-2">
-                                    {/* EDIT BUTTON */}
+                                    { }
                                     <Link
                                         to={`/admin/edit-resource/${resource.id}`}
                                         className="bg-blue-600 text-white p-2 rounded-full shadow hover:bg-blue-700 transition"
@@ -125,7 +130,7 @@ const Dashboard = () => {
                                         </svg>
                                     </Link>
 
-                                    {/* DELETE BUTTON */}
+                                    { }
                                     <button
                                         onClick={() => handleDelete(resource.id, resource.name)}
                                         className="bg-red-600 text-white p-2 rounded-full shadow hover:bg-red-700 transition"
@@ -138,7 +143,7 @@ const Dashboard = () => {
                                 </div>
                             )}
 
-                            {/* Image Section */}
+                            { }
                             <div className="h-48 overflow-hidden bg-gray-100 group">
                                 {resource.image_url ? (
                                     <img
@@ -153,7 +158,7 @@ const Dashboard = () => {
                                 )}
                             </div>
 
-                            {/* Content Section */}
+                            { }
                             <div className="p-5 flex-grow flex flex-col">
                                 <div className="flex justify-between items-start mb-2">
                                     <h3 className="text-xl font-bold text-gray-900 leading-tight">{resource.name}</h3>

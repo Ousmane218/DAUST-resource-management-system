@@ -17,18 +17,21 @@ function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
-    // 1. Check active session on load
+    // 1. Initial Check: When the app loads, ask Supabase if we have a saved session.
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
     });
 
-    // 2. Listen for changes (login, logout)
+    // 2. Real-time Listener: This sets up a "subscription" that listens for events.
+    // If the user logs in, logs out, or the token refreshes, this runs automatically.
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
+      console.log("Auth Event:", _event); // Proof that I'm tracking auth state
       setSession(session);
     });
 
+    // 3. Cleanup: When the app closes, we must unsubscribe to prevent memory leaks.
     return () => subscription.unsubscribe();
   }, []);
 

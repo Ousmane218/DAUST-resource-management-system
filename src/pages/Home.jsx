@@ -24,7 +24,7 @@ const Home = () => {
     return (
         <div className="min-h-screen bg-white">
 
-            {/* 1. HERO SECTION - Asymmetric Split */}
+            
             <div className="relative overflow-hidden">
                 <div className="max-w-7xl mx-auto">
                     <div className="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
@@ -61,19 +61,19 @@ const Home = () => {
                     </div>
                 </div>
 
-                {/* Right Side Image */}
+               
                 <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
                     <img
                         className="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full"
                         src="/daust_campus.jpg"
                         alt="University Campus"
                     />
-                    {/* Subtle overlay to blend image */}
+                   
                     <div className="absolute inset-0 bg-blue-900 opacity-10 lg:hidden"></div>
                 </div>
             </div>
 
-            {/* 2. VISUAL CATEGORIES - Dynamic from DB */}
+          
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
                 <h2 className="text-2xl font-bold text-gray-900 mb-8">Recently Added Resources</h2>
 

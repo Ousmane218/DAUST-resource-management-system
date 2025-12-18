@@ -8,7 +8,7 @@ const EditResource = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
 
-    // Form State
+    
     const [formData, setFormData] = useState({
         name: '',
         type: 'room',
@@ -17,7 +17,7 @@ const EditResource = () => {
         image_url: ''
     });
 
-    // Fetch Data on Load
+    
     useEffect(() => {
         const fetchResource = async () => {
             const { data, error } = await supabase

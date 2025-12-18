@@ -19,7 +19,7 @@ const Login = () => {
         try {
             if (isSignUp) {
                 // Handle Sign Up
-                const { data, error } = await supabase.auth.signUp({
+                const { error } = await supabase.auth.signUp({
                     email,
                     password,
                     options: {
@@ -32,7 +32,7 @@ const Login = () => {
                 toast.success('Success! Check your email for the confirmation link.');
             } else {
                 // Handle Login
-                const { data, error } = await supabase.auth.signInWithPassword({
+                const { error } = await supabase.auth.signInWithPassword({
                     email,
                     password,
                 });
